@@ -1,0 +1,10 @@
+{
+  "COMPLAINTS_MODIFICATION_REQUEST": {
+    "title": "Complaints modification request",
+    "body": "You need to fill extra data requested by government employee"
+  },
+  "COMPLAINTS_STATUS_CHANGED": {
+    "title": "Complaint status changed",
+    "body": "Complaint status changed to {status}"
+  }
+}

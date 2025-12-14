@@ -1,0 +1,12 @@
+model Device {
+    id       String         @id @default(uuid())
+    fcmToken String         @unique
+    platform DevicePlatform @default(MOBILE)
+    language Language       @default(en)
+
+    actorId String
+    actor   Actor  @relation(fields: [actorId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+
+    createdAt DateTime @default(now()) @db.Timestamptz(6)
+    updatedAt DateTime @updatedAt @db.Timestamptz(6)
+}

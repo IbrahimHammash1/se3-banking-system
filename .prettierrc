@@ -1,0 +1,28 @@
+{
+  "trailingComma": "all",
+  "endOfLine": "lf",
+  "useTabs": false,
+  "tabWidth": 2,
+  "importOrder": {
+    "groups": [
+      "builtin",
+      "external",
+      "internal"
+    ],
+    "pathGroups": [
+      {
+        "pattern": "@/**",
+        "group": "internal",
+        "position": "before"
+      }
+    ],
+    "pathGroupsExcludedImportTypes": [
+      "@/**"
+    ],
+    "newlines-between": "always",
+    "alphabetize": {
+      "order": "asc",
+      "caseInsensitive": true
+    }
+  }
+}

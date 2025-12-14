@@ -1,0 +1,2 @@
+-- AlterEnum
+ALTER TYPE "NotificationPurpose" ADD VALUE 'COMPLAINTS_STATUS_CHANGED';

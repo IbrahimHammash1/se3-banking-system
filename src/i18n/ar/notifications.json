@@ -1,0 +1,10 @@
+{
+  "COMPLAINTS_MODIFICATION_REQUEST": {
+    "title": "طلب تعديل الشكاوى",
+    "body": "يجب عليك ملء البيانات الإضافية المطلوبة من قبل موظف حكومي"
+  },
+  "COMPLAINTS_STATUS_CHANGED": {
+    "title": "تم تغيير حالة الشكوى",
+    "body": "تم تغيير حالة الشكوى إلى {status}"
+  }
+}

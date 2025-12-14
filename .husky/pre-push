@@ -1,0 +1,17 @@
+#!/bin/sh
+. "$(dirname "$0")/_/husky.sh"
+
+# Detect current branch
+BRANCH_NAME=$(git rev-parse --abbrev-ref HEAD)
+
+# Only run checks when pushing to main or develop
+if [ "$BRANCH_NAME" = "main" ] || [ "$BRANCH_NAME" = "develop" ]; then
+  echo "🚦 Running pre-push checks for branch: $BRANCH_NAME"
+
+  echo "🧪 Running tests..."
+  npm run test:e2e
+
+  echo "✅ All checks passed. Push allowed."
+else
+  echo "ℹ️ Skipping pre-push checks for branch: $BRANCH_NAME"
+fi

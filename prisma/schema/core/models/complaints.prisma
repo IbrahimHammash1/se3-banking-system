@@ -1,0 +1,69 @@
+model Complaint {
+    id      String          @id @default(uuid())
+    type    ComplaintType
+    status  ComplaintStatus @default(NEW)
+    address String
+
+    citizenId String
+    citizen   Actor  @relation("ComplaintCreator", fields: [citizenId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+
+    processingByEmployeeId String?
+    employee               Actor?               @relation("ComplaintProcessor", fields: [processingByEmployeeId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+    problemDescription     String?
+    extraInfo              String?
+    employeeNotes          String?
+    version                Float                @default(1.0)
+    governmentAgencyId     String
+    governmentAgency       GovernmentAgency     @relation(fields: [governmentAgencyId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+    createdAt              DateTime             @default(now()) @db.Timestamptz(6)
+    updatedAt              DateTime             @updatedAt @db.Timestamptz(6)
+    complaintFiles         ComplaintFiles[]
+    complaintExtraDatas    ComplaintExtraData[]
+    complaintHistories     ComplaintHistory[]
+}
+
+model ComplaintFiles {
+    id      String @id @default(uuid())
+    version Float  @default(1.0)
+
+    complaintId String
+    complaint   Complaint @relation(fields: [complaintId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+    fileId      String
+    file        File      @relation(fields: [fileId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+    createdAt   DateTime  @default(now()) @db.Timestamptz(6)
+    updatedAt   DateTime  @updatedAt @db.Timestamptz(6)
+
+    @@unique([complaintId, fileId], name: "unique_complaint_file")
+}
+
+model ComplaintExtraData {
+    id      String  @id @default(uuid())
+    key     String
+    value   String?
+    version Float   @default(1.0)
+
+    complaintId String
+    complaint   Complaint @relation(fields: [complaintId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+    createdAt   DateTime  @default(now()) @db.Timestamptz(6)
+    updatedAt   DateTime  @updatedAt @db.Timestamptz(6)
+}
+
+model ComplaintHistory {
+    id                     String          @id @default(uuid())
+    complaintId            String
+    version                Float
+    type                   ComplaintType
+    status                 ComplaintStatus
+    address                String
+    problemDescription     String?
+    extraInfo              String?
+    employeeNotes          String?
+    governmentAgencyId     String
+    processingByEmployeeId String?
+    createdAt              DateTime        @default(now()) @db.Timestamptz(6)
+    updatedByEmployeeId    String
+    updatedFields          Json
+    complaint              Complaint       @relation(fields: [complaintId], references: [id], onDelete: Cascade)
+
+    @@index([complaintId, version])
+}

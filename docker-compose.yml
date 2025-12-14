@@ -1,0 +1,68 @@
+  services:
+    # PostgreSQL Database
+    postgres:
+      container_name: postgres_container
+      image: postgres
+      environment:
+        POSTGRES_USER: ${POSTGRES_USER:-postgres}
+        POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-changeme}
+        PGDATA: /data/postgres
+        POSTGRES_DB: "${POSTGRES_DB:-se3-banking-system-db}"
+      volumes:
+        - postgres:/data/postgres
+      ports:
+        - "5432:5432"
+      networks:
+        - se3-banking-system
+      restart: unless-stopped
+
+    # PGAdmin Management Interface
+    pgadmin:
+      container_name: pgadmin_container
+      image: dpage/pgadmin4
+      environment:
+        PGADMIN_DEFAULT_EMAIL: ${PGADMIN_DEFAULT_EMAIL:-pgadmin4@pgadmin.org}
+        PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_DEFAULT_PASSWORD:-admin}
+        PGADMIN_CONFIG_SERVER_MODE:
+          "False"
+          # Auto-connect to PostgreSQL
+        PGADMIN_SERVER_NAMES: "PostgreSQL Server"
+        PGADMIN_SERVER_GROUPS: "Docker Servers"
+        PGADMIN_SERVER_HOSTS: "postgres" # Use the service name of the PostgreSQL container
+        PGADMIN_SERVER_PORTS: "5432"
+        PGADMIN_SERVER_MAINTENANCE_DB: "${POSTGRES_DB:-se3-banking-system-db}"
+        PGADMIN_SERVER_USERS: "${POSTGRES_USER:-postgres}"
+        PGADMIN_SERVER_PASSWORDS: "${POSTGRES_PASSWORD:-changeme}"
+      volumes:
+        - pgadmin:/var/lib/pgadmin
+      ports:
+        - "${PGADMIN_PORT:-5050}:80"
+      networks:
+        - se3-banking-system
+      restart: unless-stopped
+    # NestJS App
+    nest-app:
+      container_name: se3-banking-system-api
+      build:
+        context: .
+        dockerfile: Dockerfile
+      ports:
+        - "3000:3000"
+      env_file:
+        - .env
+      depends_on:
+        - postgres
+      volumes:
+        - nest-public:/app/public
+      networks:
+        - se3-banking-system
+      restart: unless-stopped
+
+  volumes:
+    postgres:
+    pgadmin:
+    nest-public:
+
+  networks:
+    se3-banking-system:
+      driver: bridge

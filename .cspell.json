@@ -1,0 +1,18 @@
+{
+  "version": "0.2",
+  "words": [],
+  "ignorePaths": ["node_modules", "dist", "logs", "public"],
+  "dictionaryDefinitions": [
+    {
+      "name": "custom-words",
+      "path": "./cspell/custom-words.txt",
+      "addWords": true
+    },
+    {
+      "name": "arabic-words",
+      "path": "./cspell/arabic-words.txt",
+      "addWords": true
+    }
+  ],
+  "dictionaries": ["custom-words", "arabic-words"]
+}
