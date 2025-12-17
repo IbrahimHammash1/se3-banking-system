@@ -3,7 +3,6 @@ import { GlobalFacadeService } from "@core/modules/global-facade/services/global
 import { AccountStatus } from "@prisma/client";
 import { CreateSessionDto } from "../dtos/create-session.dto";
 import { selectSessionValidator } from "../validators/select-session.validator";
-import { selectCitizenValidator } from "../../citizen/validator/select-citizen.validator";
 import { ReCreateSessionDto } from "../dtos/recreate-session.dto";
 @Injectable()
 export class SessionRepository {
@@ -42,7 +41,6 @@ export class SessionRepository {
   async getUserAccount(actorId: string) {
     return this._globalFacadeService.prismaService.actor.findUnique({
       where: { id: actorId },
-      select: selectCitizenValidator(),
     });
   }
 

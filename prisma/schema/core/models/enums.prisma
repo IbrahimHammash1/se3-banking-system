@@ -16,42 +16,7 @@ enum SessionType {
     SMS
 }
 
-enum ComplaintType {
-    CIVIAL_RIGHTS
-    SERVICES
-    ENVIRONMENTAL
-    LAW
-}
-
-enum ComplaintStatus {
-    NEW
-    PROCESSING
-    DONE
-    REJECTED
-    ON_HOLD
-}
-
-enum Filetype {
-    video
-    image
-    document
-    pdf
-    excel
-    csv
-}
-
-enum DevicePlatform {
-    MOBILE
-    WEB
-    DESKTOP
-}
-
 enum Language {
     en
     ar
-}
-
-enum NotificationType {
-    CUSTOM
-    SYSTEM
 }

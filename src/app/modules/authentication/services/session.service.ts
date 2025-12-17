@@ -10,7 +10,6 @@ import { CreateSessionDto, OTP_METHOD } from "../dtos/create-session.dto";
 import { generateExpireDateUtil } from "@common/utils/dates/generate-expire-date.util";
 import { envConfig } from "@common/config/env-config";
 import { AccountStatus, SessionType } from "@prisma/client";
-import { CitizenEntity } from "../../citizen/entities/citizen.entity";
 import { Propagation, Transactional } from "@nestjs-cls/transactional";
 import { ReCreateSessionDto } from "../dtos/recreate-session.dto";
 @Injectable()
@@ -108,7 +107,7 @@ export class SessionService {
     const actorAccount = await this._sessionRepository.getUserAccount(
       session.actorId,
     );
-    return CitizenEntity.createInstance(actorAccount!);
+    // return CitizenEntity.createInstance(actorAccount!);
   }
 
   @Transactional(Propagation.NotSupported)

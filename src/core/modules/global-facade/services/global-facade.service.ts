@@ -1,4 +1,3 @@
-import { EVENTS_EMITTER } from "@common/config/event-emitter.constant";
 import { TransactionHost } from "@nestjs-cls/transactional";
 import { TransactionalAdapterPrisma } from "@nestjs-cls/transactional-adapter-prisma";
 import {
@@ -11,7 +10,6 @@ import { AccountStatus, Language, Role } from "@prisma/client";
 import { ClsService } from "nestjs-cls";
 import { I18nService } from "nestjs-i18n";
 import { TokenPayload } from "src/app/modules/authentication/constants";
-import { CreateNotificationDto } from "src/app/modules/notifications/dtos/create-notification.dto";
 import { I18nPath } from "src/generated/i18n.generated";
 
 @Injectable()
@@ -37,7 +35,6 @@ export class GlobalFacadeService {
         id: true,
         role: true,
         accountStatus: true,
-        governmentAgencyId: true,
       },
     });
     if (!actor) {
@@ -50,28 +47,21 @@ export class GlobalFacadeService {
       id: actor.id,
       role: actor.role,
       accountStatus: actor.accountStatus,
-      governmentAgencyId: actor.governmentAgencyId,
     });
   }
 
   setClsService(
     actor: TokenPayload & {
       accountStatus: AccountStatus;
-      governmentAgencyId: string | null;
     },
   ) {
     this.clsService.set("actorId", actor.id);
     this.clsService.set("role", actor.role);
     this.clsService.set("accountStatus", actor.accountStatus);
-    this.clsService.set("governmentAgencyId", actor.governmentAgencyId);
   }
 
   get actorId(): string {
     return this.clsService.get("actorId");
-  }
-
-  get governmentAgencyId(): string {
-    return this.clsService.get("governmentAgencyId");
   }
 
   get role(): Role {
@@ -96,14 +86,5 @@ export class GlobalFacadeService {
     args?: Record<string, any>,
   ): Promise<string> {
     return this.i18n.translate(key, { lang: lang ?? this.language, args });
-  }
-
-  createAndEmitNotification(createNotificationDto: CreateNotificationDto) {
-    setImmediate(() => {
-      this.eventEmitter.emit(
-        EVENTS_EMITTER.NOTIFICATION_CREATE,
-        createNotificationDto,
-      );
-    });
   }
 }

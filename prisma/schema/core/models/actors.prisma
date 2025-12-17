@@ -1,28 +1,12 @@
 model Actor {
   id         String  @id @default(uuid())
   fullName   String
-  nationalId String?
   email      String  @unique()
   phone      String  @unique()
   password   String
-
-  imageId String?
-  image   File?   @relation(fields: [imageId], references: [id], onDelete: SetNull, onUpdate: Cascade)
-
   sessions  Session[]
-  auditLogs AuditLog[]
-
-  devices               Device[]
-  createdComplaints     Complaint[]    @relation("ComplaintCreator")
-  complaints            Complaint[]    @relation("ComplaintProcessor")
   accountStatus         AccountStatus  @default(NOT_ACTIVE)
-  notificationsSent     Notification[] @relation("NotificationSender")
-  notificationsReceived Notification[] @relation("NotificationReceiver")
-
-  governmentAgencyId String?
-  governmentAgency   GovernmentAgency? @relation(fields: [governmentAgencyId], references: [id], onDelete: Cascade, onUpdate: Cascade)
-
-  role      Role     @default(CITIZEN)
+  role      Role     @default(ADMIN)
   createdAt DateTime @default(now()) @db.Timestamptz(6)
   updatedAt DateTime @updatedAt @db.Timestamptz(6)
 }
