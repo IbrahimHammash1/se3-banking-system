@@ -9,7 +9,6 @@ import * as expressBasicAuth from "express-basic-auth";
 import * as path from "path";
 import * as fs from "fs";
 import { HttpExceptionFilter } from "./common/filters/http-exception.filter";
-import { AuditLogsService } from "./app/modules/audit-logs/services/audit-logs.service";
 import { GlobalFacadeService } from "@core/modules/global-facade/services/global-facade.service";
 
 async function bootstrap() {
@@ -17,10 +16,7 @@ async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   const port = envConfig.PORT;
   app.useGlobalFilters(
-    new HttpExceptionFilter(
-      app.get(AuditLogsService),
-      app.get(GlobalFacadeService),
-    ),
+    new HttpExceptionFilter(app.get(GlobalFacadeService)),
     new PrismaExceptionFilter(),
   );
 

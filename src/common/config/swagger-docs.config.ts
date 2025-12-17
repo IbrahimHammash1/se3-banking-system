@@ -5,7 +5,6 @@ import { ValidationErrorResponseEntity } from "@common/entities/serializedRespon
 import { SwaggerModule, DocumentBuilder } from "@nestjs/swagger";
 import { SwaggerTheme, SwaggerThemeNameEnum } from "swagger-themes";
 import { envConfig } from "./env-config";
-import { SwaggerNotificationPayloadExtraModels } from "src/app/modules/notifications/entities/payload";
 
 export const configureSwaggerDocs = (app) => {
   const config = new DocumentBuilder()
@@ -31,7 +30,6 @@ export const configureSwaggerDocs = (app) => {
       GlobalPaginatedResponseEntity,
       ErrorResponseEntity,
       ValidationErrorResponseEntity,
-      ...SwaggerNotificationPayloadExtraModels,
     ],
   });
 

@@ -1,9 +1,0 @@
-model GovernmentAgency {
-    id         String      @id @default(uuid())
-    name       String
-    sector     String
-    complaints Complaint[]
-    employees  Actor[]
-    createdAt  DateTime    @default(now()) @db.Timestamptz(6)
-    updatedAt  DateTime    @updatedAt @db.Timestamptz(6)
-}

@@ -3,7 +3,6 @@ import { Body, Controller, Param, Patch, Post } from "@nestjs/common";
 import { ApiResponse, ApiTags } from "@nestjs/swagger";
 import { SessionService } from "../services/session.service";
 import { checkIfIdExist } from "@common/mixins/check-if-id-exist.pipe";
-import { CitizenEntity } from "../../citizen/entities/citizen.entity";
 import { VerifyOtpDto } from "../dtos/verify-otp.dto";
 import { LoginDto } from "../dtos/login-dto";
 import { LoginEntity } from "../entities/login.entity";
@@ -42,7 +41,6 @@ export class AuthenticationController {
     return SessionEntity.createInstance(session);
   }
   @Patch("session/verify/:sessionId")
-  @ApiResponse({ type: CitizenEntity })
   verify(
     @Param("sessionId", checkIfIdExist("Session")) sessionId: string,
     @Body() verifyOtpDto: VerifyOtpDto,
