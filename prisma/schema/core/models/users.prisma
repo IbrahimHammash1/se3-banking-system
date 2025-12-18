@@ -1,0 +1,17 @@
+model User {
+  id        String      @id @default(uuid())
+  username  String      @unique()
+  password  String
+  fullName  String
+  email     String      @unique()
+  phone     String      @unique()
+  userType  UserType
+  createdAt DateTime    @default(now()) @db.Timestamptz(6)
+
+  userRoles UserRole[]
+  reports   Report[]
+
+  @@index([userType])
+  @@index([email])
+}
+

@@ -1,0 +1,21 @@
+model Transaction {
+  id                    String                @id @default(uuid())
+  fromAccountId         String?               // Nullable for DEPOSIT (external source)
+  toAccountId           String?               // Nullable for WITHDRAWAL (external destination)
+  amount                Decimal               @db.Decimal(19, 4)
+  transactionType       TransactionType
+  status                TransactionStatus     @default(PENDING)
+  transactionDate       DateTime              @default(now()) @db.Timestamptz(6)
+  scheduledTransactionId String?
+
+  fromAccount         Account?              @relation("AccountFromTransactions", fields: [fromAccountId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  toAccount           Account?              @relation("AccountToTransactions", fields: [toAccountId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  scheduledTransaction ScheduledTransaction? @relation(fields: [scheduledTransactionId], references: [id], onDelete: SetNull, onUpdate: Cascade)
+  notifications        Notification[]
+
+  @@index([fromAccountId])
+  @@index([toAccountId])
+  @@index([transactionDate])
+  @@index([status])
+  @@index([transactionType])
+}

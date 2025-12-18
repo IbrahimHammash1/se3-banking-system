@@ -1,0 +1,13 @@
+model Report {
+  id          String   @id @default(uuid())
+  userId      String
+  reportType  String
+  generatedAt DateTime @default(now()) @db.Timestamptz(6)
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+
+  @@index([userId])
+  @@index([reportType])
+  @@index([generatedAt])
+}
+

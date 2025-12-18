@@ -1,0 +1,21 @@
+model Account {
+  id              String        @id @default(uuid())
+  clientId        String
+  parentAccountId String?
+  accountType     AccountType
+  balance         Decimal       @default(0) @db.Decimal(19, 4)
+  status          AccountStatus @default(ACTIVE)
+  createdAt       DateTime      @default(now()) @db.Timestamptz(6)
+
+  client              Client                @relation(fields: [clientId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  parentAccount       Account?              @relation("AccountToAccount", fields: [parentAccountId], references: [id], onDelete: SetNull, onUpdate: Cascade)
+  childAccounts       Account[]             @relation("AccountToAccount")
+  fromTransactions    Transaction[]         @relation("AccountFromTransactions")
+  toTransactions      Transaction[]         @relation("AccountToTransactions")
+  fromScheduledTransactions ScheduledTransaction[] @relation("ScheduledTransactionFrom")
+  toScheduledTransactions   ScheduledTransaction[] @relation("ScheduledTransactionTo")
+
+  @@index([clientId])
+  @@index([status])
+  @@index([accountType])
+}

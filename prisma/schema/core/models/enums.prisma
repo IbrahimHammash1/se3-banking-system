@@ -1,22 +1,56 @@
-enum Role {
-    ADMIN
-    EMPLOYEE
-    CITIZEN
+enum UserType {
+  ADMIN
+  TELLER
+  MANAGER
+}
+
+enum AccountType {
+  SAVINGS
+  CHECKING
+  LOAN
+  INVESTMENT
 }
 
 enum AccountStatus {
-    ACTIVE
-    NOT_ACTIVE
-    BLOCKED
+  ACTIVE
+  FROZEN
+  SUSPENDED
+  CLOSED
 }
 
-enum SessionType {
-    SIGN_UP
-    EMAIL
-    SMS
+enum TransactionType {
+  DEPOSIT
+  WITHDRAWAL
+  TRANSFER
 }
 
-enum Language {
-    en
-    ar
+enum TransactionStatus {
+  PENDING
+  APPROVED
+  FAILED
+  COMPLETED
+}
+
+enum ScheduledTransactionFrequency {
+  ONCE
+  DAILY
+  WEEKLY
+  MONTHLY
+}
+
+enum ScheduledTransactionStatus {
+  ACTIVE
+  PAUSED
+  COMPLETED
+}
+
+enum TicketStatus {
+  OPEN
+  IN_PROGRESS
+  CLOSED
+}
+
+enum NotificationStatus {
+  SENT
+  FAILED
 }

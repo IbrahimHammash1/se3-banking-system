@@ -1,101 +1,113 @@
 ```mermaid
 erDiagram
-    USER ||--o{ ROLE : has
-    USER ||--o{ USER_ROLE : has
-    ROLE ||--o{ USER_ROLE : assigned_to
-    ROLE ||--o{ ROLE_PERMISSION : has
-    PERMISSION ||--o{ ROLE_PERMISSION : assigned_to
+    %% ===== USERS & ACCESS CONTROL =====
+    USER ||--o{ USER_ROLE : assigned
+    ROLE ||--o{ USER_ROLE : mapped
+    ROLE ||--o{ ROLE_PERMISSION : defines
+    PERMISSION ||--o{ ROLE_PERMISSION : grants
 
+    %% ===== CLIENT DOMAIN =====
     CLIENT ||--o{ ACCOUNT : owns
-    CLIENT ||--o{ SUPPORT_TICKET : submits
-    CLIENT ||--o{ REPORT : receives
-    ACCOUNT ||--o{ TRANSACTION : has
-    ACCOUNT ||--o{ CHILD_ACCOUNT : parent_of
-    ACCOUNT ||--o{ SCHEDULED_TRANSACTION : has
+    CLIENT ||--o{ SUPPORT_TICKET : creates
+    CLIENT ||--o{ SCHEDULED_TRANSACTION : schedules
+    CLIENT ||--o{ NOTIFICATION : receives
+
+    %% ===== ACCOUNT DOMAIN =====
+    ACCOUNT ||--o{ TRANSACTION : records
+    ACCOUNT ||--o{ ACCOUNT : parent_child
+
+    %% ===== TRANSACTIONS =====
+    SCHEDULED_TRANSACTION ||--o{ TRANSACTION : generates
     TRANSACTION ||--o{ NOTIFICATION : triggers
 
+    %% ===== ADMIN / REPORTING =====
+    USER ||--o{ REPORT : generates
+
+    %% ===== TABLE DEFINITIONS =====
+
     USER {
-        int user_id PK
-        string username
+        string id PK
+        string username UK
         string password
         string full_name
-        string email
-        string phone
-        string address
+        string email UK
+        string phone UK
         string user_type
+        datetime created_at
     }
 
     CLIENT {
-        int client_id PK
+        string id PK
         string full_name
-        string email
-        string phone
+        string email UK
+        string phone UK
         string address
         date dob
+        datetime created_at
     }
 
     ROLE {
-        int role_id PK
-        string role_name
+        string id PK
+        string role_name UK
         string description
     }
 
     USER_ROLE {
-        int user_role_id PK
-        int user_id FK
-        int role_id FK
+        string id PK
+        string user_id FK
+        string role_id FK
     }
 
     PERMISSION {
-        int permission_id PK
-        string permission_name
+        string id PK
+        string permission_name UK
         string description
     }
 
     ROLE_PERMISSION {
-        int role_permission_id PK
-        int role_id FK
-        int permission_id FK
+        string id PK
+        string role_id FK
+        string permission_id FK
     }
 
     ACCOUNT {
-        int account_id PK
+        string id PK
+        string client_id FK
+        string parent_account_id FK "nullable"
         string account_type
         decimal balance
         string status
-        int parent_account_id FK
-        int client_id FK
-        date created_at
-    }
-
-    CHILD_ACCOUNT {
-        int child_account_id PK
-        int parent_account_id FK
-        int account_id FK
+        datetime created_at
     }
 
     TRANSACTION {
-        int transaction_id PK
-        int from_account_id FK
-        int to_account_id FK
+        string id PK
+        string from_account_id FK "nullable"
+        string to_account_id FK "nullable"
         decimal amount
-        string type
+        string transaction_type
         string status
         datetime transaction_date
+        string scheduled_transaction_id FK "nullable"
     }
 
     SCHEDULED_TRANSACTION {
-        int scheduled_id PK
-        int account_id FK
+        string id PK
+        string client_id FK
+        string from_account_id FK "nullable"
+        string to_account_id FK "nullable"
         decimal amount
+        string transaction_type
         string frequency
         datetime next_run
+        datetime last_run "nullable"
         string status
+        datetime created_at
     }
 
     SUPPORT_TICKET {
-        int ticket_id PK
-        int client_id FK
+        string id PK
+        string client_id FK
         string subject
         string description
         string status
@@ -104,20 +116,19 @@ erDiagram
     }
 
     NOTIFICATION {
-        int notification_id PK
-        int transaction_id FK
-        int client_id FK
-        string type
+        string id PK
+        string transaction_id FK
+        string client_id FK
+        string notification_type
         string message
         string status
         datetime sent_at
     }
 
     REPORT {
-        int report_id PK
-        int client_id FK
+        string id PK
+        string user_id FK
         string report_type
-        string data
         datetime generated_at
     }
 ```
