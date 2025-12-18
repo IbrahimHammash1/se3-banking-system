@@ -1,0 +1,22 @@
+model ScheduledTransaction {
+  id              String                        @id @default(uuid())
+  clientId        String
+  fromAccountId   String?                       // Nullable for DEPOSIT (external source)
+  toAccountId     String?                       // Nullable for WITHDRAWAL (external destination)
+  amount          Decimal                       @db.Decimal(19, 4)
+  transactionType TransactionType
+  frequency       ScheduledTransactionFrequency
+  nextRun         DateTime                      @db.Timestamptz(6)
+  lastRun         DateTime?                     @db.Timestamptz(6)
+  status          ScheduledTransactionStatus    @default(ACTIVE)
+  createdAt       DateTime                      @default(now()) @db.Timestamptz(6)
+
+  client        Client        @relation(fields: [clientId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  fromAccount   Account?      @relation("ScheduledTransactionFrom", fields: [fromAccountId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  toAccount     Account?      @relation("ScheduledTransactionTo", fields: [toAccountId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  transactions  Transaction[]
+
+  @@index([clientId])
+  @@index([nextRun])
+  @@index([status])
+}
